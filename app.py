@@ -26,7 +26,7 @@ arxiv_url = st.text_input(
     placeholder="https://arxiv.org/abs/1706.03762"
 )
 
-if st.button("Evaluate Paper"):
+if st.button("Evaluate Paper") and arxiv_url:
 
     if not arxiv_url:
         st.warning("Please enter a valid arXiv URL.")
