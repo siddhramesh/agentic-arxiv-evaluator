@@ -6,25 +6,9 @@ def format_report(title, evaluation):
 ## Paper Title
 {title}
 
-## Executive Summary
-{evaluation['executive_summary']}
+## AI Evaluation
 
-## Detailed Scores
-
-**Consistency Score:** {evaluation['consistency_score']} / 100
-
-**Grammar Rating:** {evaluation['grammar_rating']}
-
-**Novelty Index**
-{evaluation['novelty_index']}
-
-**Accuracy / Fabrication Risk**
-{evaluation['fabrication_risk']}
-
-## Fact Check Log
+{evaluation['analysis']}
 """
-
-    for item in evaluation["fact_check_log"]:
-        report += f"- {item}\n"
 
     return report
