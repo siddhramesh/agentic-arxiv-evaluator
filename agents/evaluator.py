@@ -10,11 +10,8 @@ from agents.authenticity_agent import create_authenticity_agent
 
 def evaluate_paper(paper):
 
-   llm = LLM(
-    model="openrouter/mistralai/mistral-7b-instruct",
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY")
-)
+   llm = LLM(model="gpt-4o-mini")
+   
     consistency_agent = create_consistency_agent(llm)
     grammar_agent = create_grammar_agent(llm)
     novelty_agent = create_novelty_agent(llm)
