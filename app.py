@@ -1,45 +1,72 @@
 import streamlit as st
-from crewai import Crew, Process
-from agents.research_agent import research_agent
-from agents.methodology_agent import methodology_agent
-from agents.evaluation_agent import evaluation_agent
-from crewai import Task
 
-st.title("📄 Agentic AI Research Paper Evaluator")
+from tools.arxiv_scraper import fetch_paper
+from agents.evaluator import evaluate_paper
+from report.report_formatter import format_report
 
-url = st.text_input("Enter arXiv paper URL")
+
+st.set_page_config(
+    page_title="Agentic Research Paper Evaluator",
+    page_icon="📄",
+    layout="wide"
+)
+
+st.title("📄 Agentic Research Paper Evaluator")
+st.write("Multi-agent AI system that evaluates research papers from arXiv.")
+
+st.divider()
+
+# Input section
+arxiv_url = st.text_input(
+    "Enter arXiv Paper URL",
+    placeholder="https://arxiv.org/abs/1706.03762"
+)
 
 if st.button("Evaluate Paper"):
 
-    if url == "":
-        st.warning("Please enter a valid arXiv URL")
-    else:
+    if not arxiv_url:
+        st.warning("Please enter a valid arXiv URL.")
+        st.stop()
 
-        research_task = Task(
-            description=f"Extract key details from this research paper: {url}. Summarize the abstract, problem statement and contributions.",
-            agent=research_agent,
-            expected_output="Summary of the paper with problem statement and contributions"
-        )
+    with st.spinner("Fetching paper from arXiv..."):
 
-        methodology_task = Task(
-            description=f"Analyze the methodology used in the paper: {url}. Explain the approach, models, and techniques used.",
-            agent=methodology_agent,
-            expected_output="Explanation of methodology and techniques"
-        )
+        try:
+            paper = fetch_paper(arxiv_url)
 
-        evaluation_task = Task(
-            description=f"Evaluate the strengths and weaknesses of the research paper: {url}. Provide a critical review.",
-            agent=evaluation_agent,
-            expected_output="Critical evaluation with strengths and weaknesses"
-        )
+        except Exception as e:
+            st.error(f"Failed to fetch paper: {e}")
+            st.stop()
 
-        crew = Crew(
-            agents=[research_agent, methodology_agent, evaluation_agent],
-            tasks=[research_task, methodology_task, evaluation_task],
-            process=Process.sequential
-        )
+    st.success("Paper fetched successfully")
 
-        result = crew.kickoff()
+    st.subheader("Paper Title")
+    st.write(paper["title"])
 
-        st.subheader("Evaluation Report")
-        st.write(result)
+    with st.expander("Abstract"):
+        st.write(paper["abstract"])
+
+    st.divider()
+
+    with st.spinner("Running multi-agent evaluation..."):
+
+        try:
+            evaluation = evaluate_paper(paper)
+
+        except Exception as e:
+            st.error(f"Evaluation failed: {e}")
+            st.stop()
+
+    st.success("Evaluation complete")
+
+    report = format_report(paper["title"], evaluation)
+
+    st.subheader("Evaluation Report")
+
+    st.markdown(report)
+
+    st.download_button(
+        label="Download Report",
+        data=report,
+        file_name="evaluation_report.md",
+        mime="text/markdown"
+    )
