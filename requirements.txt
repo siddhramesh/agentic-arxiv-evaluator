@@ -1,10 +1,6 @@
-streamlit==1.32.2
-crewai==0.28.8
-crewai-tools==0.1.6
-openai==1.14.3
-langchain==0.1.13
-langchain-openai==0.0.8
-pydantic==2.6.4
-requests==2.31.0
-arxiv==2.1.0
-tiktoken==0.6.0
+streamlit
+crewai
+openai
+arxiv
+requests
+tiktoken
