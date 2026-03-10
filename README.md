@@ -1,15 +1,28 @@
 # Agentic Research Paper Evaluator
 
-This project builds an AI system that evaluates research papers from arXiv.
+Multi-agent AI system that evaluates research papers from arXiv.
 
 ## Features
 
-- Extracts paper data from arXiv
-- Uses AI reviewers to analyze the paper
-- Generates a structured judgement report
+- arXiv paper scraping
+- Multi-agent AI evaluation
+- Consistency analysis
+- Grammar review
+- Novelty assessment
+- Fact checking
+- Fabrication probability detection
 - Streamlit UI
 
-## Run locally
+## Setup
+
+Install dependencies
 
 pip install -r requirements.txt
+
+Set OpenAI API key
+
+export OPENAI_API_KEY=your_key
+
+Run the app
+
 streamlit run app.py
