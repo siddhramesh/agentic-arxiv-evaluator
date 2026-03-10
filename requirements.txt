@@ -1,6 +1,9 @@
-streamlit
-crewai
-openai
-arxiv
-python-dotenv
+--only-binary=:all:
+
+streamlit==1.33.0
+crewai==0.30.11
+openai==1.30.1
+arxiv==2.1.0
+python-dotenv==1.0.1
 tiktoken==0.7.0
+pysqlite3-binary
