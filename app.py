@@ -10,16 +10,19 @@ url = st.text_input("Enter arXiv paper URL")
 
 if st.button("Evaluate Paper"):
 
-    if "arxiv.org" not in url:
-        st.error("Please enter a valid arXiv link")
-    else:
+    if not url:
+        st.warning("Please enter a URL")
 
+    elif "arxiv.org" not in url:
+        st.error("Please enter a valid arXiv link")
+
+    else:
         with st.spinner("Analyzing paper using AI agents..."):
 
             paper = fetch_paper(url)
 
-            evaluation = evaluate_paper(paper["abstract"])
+            evaluation = evaluate_paper(paper)
 
             report = format_report(paper["title"], evaluation)
 
-        st.markdown(report)
+            st.markdown(report)
