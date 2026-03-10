@@ -1,7 +1,7 @@
 import streamlit as st
 
 from tools.arxiv_scraper import fetch_paper
-from agents.evaluator import evaluate_paper
+from agents.evaluation_agents import evaluate_paper
 from report.report_formatter import format_report
 
 st.title("Agentic AI Research Paper Evaluator")
