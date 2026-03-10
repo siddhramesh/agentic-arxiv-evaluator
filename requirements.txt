@@ -2,8 +2,3 @@ crewai
 crewai-tools
 openai
 streamlit
-langchain
-langchain-community
-tiktoken
-python-dotenv
-pydantic
