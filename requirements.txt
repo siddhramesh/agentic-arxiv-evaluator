@@ -3,3 +3,4 @@ crewai
 openai
 arxiv
 python-dotenv
+tiktoken==0.7.0
