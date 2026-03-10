@@ -8,7 +8,7 @@ from agents.factcheck_agent import create_factcheck_agent
 from agents.authenticity_agent import create_authenticity_agent
 
 
-def evaluate_paper(text):
+def evaluate_paper(paper):
 
     llm = LLM(model="gpt-3.5-turbo")
 
@@ -19,27 +19,65 @@ def evaluate_paper(text):
     authenticity_agent = create_authenticity_agent(llm)
 
     consistency_task = Task(
-        description=f"Evaluate if methodology supports results:\n{text}",
+        description=f"""
+Evaluate if the methodology supports the results.
+
+Methodology:
+{paper['methodology']}
+
+Results:
+{paper['results']}
+
+Return a score from 0-100 and explanation.
+""",
         agent=consistency_agent
     )
 
     grammar_task = Task(
-        description=f"Evaluate grammar and language quality:\n{text}",
+        description=f"""
+Evaluate grammar, clarity, and professional tone.
+
+Text:
+{paper['abstract']}
+
+Return rating: High / Medium / Low.
+""",
         agent=grammar_agent
     )
 
     novelty_task = Task(
-        description=f"Evaluate novelty of the research:\n{text}",
+        description=f"""
+Evaluate novelty of the research.
+
+Abstract:
+{paper['abstract']}
+
+Explain whether this work appears novel.
+""",
         agent=novelty_agent
     )
 
     factcheck_task = Task(
-        description=f"Fact-check scientific claims:\n{text}",
+        description=f"""
+Verify factual claims in the text.
+
+Text:
+{paper['abstract']}
+
+Return list of verified vs questionable claims.
+""",
         agent=factcheck_agent
     )
 
     authenticity_task = Task(
-        description=f"Estimate fabrication probability:\n{text}",
+        description=f"""
+Analyze if research could contain fabricated results.
+
+Text:
+{paper['results']}
+
+Return fabrication probability percentage.
+""",
         agent=authenticity_agent
     )
 
@@ -60,4 +98,8 @@ def evaluate_paper(text):
         ]
     )
 
-    return crew.kickoff()
+    result = crew.kickoff()
+
+    return {
+        "analysis": result
+    }
