@@ -1,20 +1,33 @@
+from crewai import Agent, Task, Crew
+
 def evaluate_paper(abstract):
 
-    evaluation = {
-        "executive_summary": "PASS – The research appears coherent and contributes to the field.",
+    research_agent = Agent(
+        role="Research Analyst",
+        goal="Analyze research paper abstracts and determine their novelty and clarity",
+        backstory="An AI trained to evaluate academic research quality.",
+        verbose=True
+    )
 
-        "consistency_score": 82,
+    evaluation_task = Task(
+        description=f"""
+        Analyze the following research abstract and provide:
+        - Executive summary (pass/fail)
+        - Consistency score (0-100)
+        - Grammar rating
+        - Novelty assessment
 
-        "grammar_rating": "High",
+        Abstract:
+        {abstract}
+        """,
+        agent=research_agent
+    )
 
-        "novelty_index": "The work proposes a meaningful idea and builds upon prior research.",
+    crew = Crew(
+        agents=[research_agent],
+        tasks=[evaluation_task]
+    )
 
-        "fact_check_log": [
-            "Claim about neural attention models appears valid.",
-            "No obvious unsupported claims detected."
-        ],
+    result = crew.kickoff()
 
-        "fabrication_risk": "Low (10%)"
-    }
-
-    return evaluation
+    return {"analysis": result}
