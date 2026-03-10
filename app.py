@@ -1,21 +1,25 @@
 import streamlit as st
 
 from tools.arxiv_scraper import fetch_paper
-from report.evaluator import evaluate_paper
+from agents.evaluation_agents import evaluate_paper
 from report.report_formatter import format_report
 
 st.title("Agentic AI Research Paper Evaluator")
 
-st.write("Paste an arXiv paper link to generate a judgement report.")
-
-url = st.text_input("Enter arXiv URL")
+url = st.text_input("Enter arXiv paper URL")
 
 if st.button("Evaluate Paper"):
 
-    paper = fetch_paper(url)
+    if "arxiv.org" not in url:
+        st.error("Please enter a valid arXiv link")
+    else:
 
-    evaluation = evaluate_paper(paper["abstract"])
+        with st.spinner("Analyzing paper using AI agents..."):
 
-    report = format_report(paper["title"], evaluation)
+            paper = fetch_paper(url)
 
-    st.markdown(report)
+            evaluation = evaluate_paper(paper["abstract"])
+
+            report = format_report(paper["title"], evaluation)
+
+        st.markdown(report)
