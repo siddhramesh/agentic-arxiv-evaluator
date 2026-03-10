@@ -1,3 +1,9 @@
-streamlit
+crewai
+crewai-tools
 openai
-arxiv
+streamlit
+langchain
+langchain-community
+tiktoken
+python-dotenv
+pydantic
