@@ -1,3 +1,4 @@
+import os
 from crewai import Crew, Task, LLM, Process
 
 from agents.consistency_agent import create_consistency_agent
@@ -11,6 +12,9 @@ def evaluate_paper(paper):
     """
     Runs multi-agent evaluation of a research paper.
     """
+
+    # Ensure OpenAI API key exists
+    os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
     # Initialize LLM
     llm = LLM(
@@ -28,7 +32,7 @@ def evaluate_paper(paper):
     # Safely extract paper sections
     abstract = paper.get("abstract", "Not available")
     methodology = paper.get("methodology", "Not available")
-    results = paper.get("results", "Not available")
+    paper_results = paper.get("results", "Not available")
 
     # Task 1: Methodology vs Results Consistency
     consistency_task = Task(
@@ -39,12 +43,9 @@ Methodology:
 {methodology}
 
 Results:
-{results}
-
-Return:
-1. Score (0-100)
-2. Short explanation
+{paper_results}
 """,
+        expected_output="Score (0-100) and short explanation",
         agent=consistency_agent
     )
 
@@ -55,11 +56,8 @@ Evaluate grammar quality and clarity of the abstract.
 
 Text:
 {abstract}
-
-Return:
-Rating: High / Medium / Low
-Short explanation
 """,
+        expected_output="Rating (High/Medium/Low) and short explanation",
         agent=grammar_agent
     )
 
@@ -70,11 +68,8 @@ Evaluate novelty of this research.
 
 Abstract:
 {abstract}
-
-Return:
-1. Novelty rating (High / Medium / Low)
-2. Explanation
 """,
+        expected_output="Novelty rating (High/Medium/Low) with explanation",
         agent=novelty_agent
     )
 
@@ -85,11 +80,8 @@ Verify factual plausibility of claims.
 
 Text:
 {abstract}
-
-Return:
-1. Possible factual concerns
-2. Explanation
 """,
+        expected_output="Possible factual concerns with explanation",
         agent=factcheck_agent
     )
 
@@ -99,12 +91,9 @@ Return:
 Analyze whether results appear fabricated or statistically suspicious.
 
 Results:
-{results}
-
-Return:
-1. Fabrication probability (Low / Medium / High)
-2. Explanation
+{paper_results}
 """,
+        expected_output="Fabrication probability (Low/Medium/High) with explanation",
         agent=authenticity_agent
     )
 
@@ -131,8 +120,8 @@ Return:
     # Run evaluation
     crew.kickoff()
 
-    # Structured results (better for Streamlit UI)
-    results = {
+    # Structured output for Streamlit UI
+    output = {
         "consistency_analysis": str(consistency_task.output),
         "grammar_analysis": str(grammar_task.output),
         "novelty_analysis": str(novelty_task.output),
@@ -140,5 +129,4 @@ Return:
         "authenticity_analysis": str(authenticity_task.output)
     }
 
-    return results
-```
+    return output
