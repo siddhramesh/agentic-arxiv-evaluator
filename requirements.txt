@@ -1,8 +1,5 @@
 streamlit
-crewai[tools]
+crewai
 openai
 arxiv
-requests
-pydantic
-langchain-openai
-tiktoken
+python-dotenv
