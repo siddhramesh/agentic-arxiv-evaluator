@@ -10,8 +10,9 @@ from agents.authenticity_agent import create_authenticity_agent
 
 def evaluate_paper(paper):
 
-    llm = LLM(model="gpt-3.5-turbo")
-
+    llm = LLM(
+    model="gpt-4o-mini"
+)
     consistency_agent = create_consistency_agent(llm)
     grammar_agent = create_grammar_agent(llm)
     novelty_agent = create_novelty_agent(llm)
