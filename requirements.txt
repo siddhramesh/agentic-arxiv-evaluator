@@ -1,6 +1,8 @@
 streamlit
-crewai
+crewai[tools]
 openai
 arxiv
 requests
+pydantic
+langchain-openai
 tiktoken
