@@ -1,4 +1,3 @@
-```python
 from crewai import Crew, Task, LLM, Process
 
 from agents.consistency_agent import create_consistency_agent
