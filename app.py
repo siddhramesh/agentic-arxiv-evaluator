@@ -1,7 +1,7 @@
 import streamlit as st
 
 from tools.arxiv_scraper import download_pdf
-from tools.paper_parser import extract_text
+from tools.paper_parser import extract_text, split_sections
 from evaluator.evaluator import evaluate_paper
 
 st.title("Agentic Research Paper Evaluator")
