@@ -1,9 +1,12 @@
+import os
+os.environ["OTEL_SDK_DISABLED"] = "true"
+os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
+
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
-import os
 
 from tools.arxiv_scraper import download_pdf
 from tools.paper_parser import extract_text, split_sections
