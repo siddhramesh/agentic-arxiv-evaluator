@@ -5,12 +5,14 @@ from agents.grammar_agent import create_grammar_agent
 from agents.novelty_agent import create_novelty_agent
 from agents.factcheck_agent import create_factcheck_agent
 from agents.authenticity_agent import create_authenticity_agent
+from agents.judge_agent import create_judge_agent
 
 from tasks.consistency_task import create_consistency_task
 from tasks.grammar_task import create_grammar_task
 from tasks.novelty_task import create_novelty_task
 from tasks.factcheck_task import create_factcheck_task
 from tasks.authenticity_task import create_authenticity_task
+from tasks.judge_task import create_judge_task
 
 
 def evaluate_paper(sections, llm):
@@ -25,6 +27,7 @@ def evaluate_paper(sections, llm):
     novelty_agent = create_novelty_agent(llm)
     factcheck_agent = create_factcheck_agent(llm)
     authenticity_agent = create_authenticity_agent(llm)
+    judge_agent = create_judge_agent(llm)
 
     # Create tasks
     consistency_task = create_consistency_task(consistency_agent, methodology, results)
@@ -33,12 +36,16 @@ def evaluate_paper(sections, llm):
     factcheck_task = create_factcheck_task(factcheck_agent, methodology)
     authenticity_task = create_authenticity_task(authenticity_agent, results)
 
+    # Judge task (runs after other analyses)
+    judge_task = create_judge_task(judge_agent, "Results from previous agent analyses")
+
     tasks = [
         consistency_task,
         grammar_task,
         novelty_task,
         factcheck_task,
-        authenticity_task
+        authenticity_task,
+        judge_task
     ]
 
     crew = Crew(
@@ -47,7 +54,8 @@ def evaluate_paper(sections, llm):
             grammar_agent,
             novelty_agent,
             factcheck_agent,
-            authenticity_agent
+            authenticity_agent,
+            judge_agent
         ],
         tasks=tasks,
         process=Process.sequential,
