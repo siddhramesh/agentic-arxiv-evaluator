@@ -1,6 +1,6 @@
 pysqlite3-binary
 streamlit>=1.32.0
-crewai>=0.28.8,<=0.35.8
+crewai>=0.28.8
 pymupdf>=1.23.0
 requests>=2.31.0
 openai>=1.14.0
