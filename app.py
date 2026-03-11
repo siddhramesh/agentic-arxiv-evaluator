@@ -20,10 +20,10 @@ st.write(
 )
 
 # Load API key from Streamlit secrets
-if "GROQ_API_KEY" in st.secrets:
-    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+if "GEMINI_API_KEY" in st.secrets:
+    os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
 else:
-    st.error("GROQ_API_KEY not found in Streamlit secrets.")
+    st.error("GEMINI_API_KEY not found in Streamlit secrets.")
     st.stop()
 
 # Input field
@@ -66,8 +66,8 @@ if st.button("Evaluate Paper"):
 
             # Step 4: Initialize LLM
             llm = LLM(
-                model="groq/llama-3.3-70b-versatile",
-                api_key=st.secrets["GROQ_API_KEY"]
+                 model="gemini/gemini-1.5-flash",
+                api_key=st.secrets["GEMINI_API_KEY"]
             )
 
             # Step 5: Run evaluation
