@@ -18,7 +18,6 @@ def evaluate_paper(sections, llm):
     abstract = sections["abstract"]
     methodology = sections["methodology"]
     results = sections["results"]
-    conclusion = sections["conclusion"]
 
     # Create agents
     consistency_agent = create_consistency_agent(llm)
@@ -52,7 +51,8 @@ def evaluate_paper(sections, llm):
         ],
         tasks=tasks,
         process=Process.sequential,
-        verbose=True
+        verbose=True,
+        memory=False
     )
 
     result = crew.kickoff()
