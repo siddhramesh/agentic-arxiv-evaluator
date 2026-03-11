@@ -204,6 +204,30 @@ https://arxiv.org/abs/1706.03762
 
 ---
 
+## Future Improvements
+
+The following enhancements have been identified and can be implemented in future iterations of this project:
+
+### 1. Real Novelty Search via Semantic Scholar API
+Currently the Novelty Agent analyzes the abstract in isolation using LLM reasoning. A future improvement would integrate the free **Semantic Scholar API** (`tools/semantic_scholar.py`) to search for similar existing papers and provide evidence-based novelty scoring rather than relying solely on LLM opinion.
+
+### 2. Citations Verification Agent
+A dedicated `citations_agent.py` could be added to the `agents/` directory to verify whether references cited in the paper actually exist, are correctly attributed, and support the claims made. This would significantly strengthen the fact-checking pipeline.
+
+### 3. Per-Agent Progress Bar
+The current UI shows a single spinner during the entire 2-3 minute evaluation. A progress bar in `app.py` that updates after each of the 6 agents completes would make the experience more transparent and informative for the user.
+
+### 4. Smart Retry Logic for Rate Limits
+The current implementation uses a fixed 20-second sleep between agents to avoid LLM rate limits. A smarter approach using the `tenacity` library in `evaluator/evaluator.py` would implement exponential backoff retries, reducing unnecessary wait time when the API is available.
+
+### 5. PDF Export
+The current report is exported as Markdown. A future version could add PDF generation using `fpdf2` in the `reports/` directory, with a dedicated PDF download button in `app.py`, fully satisfying the PDF deliverable format mentioned in the assignment.
+
+### 6. Paper Metadata Display
+Before running the evaluation, the app could display the paper's title, authors, and publication date fetched from the arXiv API. This would give users confirmation they entered the correct paper before waiting for the full evaluation to complete.
+
+---
+
 ## Technology Stack
 
 | Tool | Purpose |
