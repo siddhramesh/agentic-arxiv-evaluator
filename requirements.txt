@@ -8,4 +8,3 @@ arxiv>=2.1.0
 python-dotenv>=1.0.0
 chromadb==0.4.24
 hnswlib==0.7.0
-pysqlite3-binary
