@@ -1,2 +1,3 @@
 pipreqs
 pymupdf
+crewai
