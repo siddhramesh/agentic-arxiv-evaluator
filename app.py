@@ -33,11 +33,24 @@ if st.button("Evaluate Paper"):
     if url:
         try:
             # Heavy imports only when needed
-            from tools.arxiv_scraper import download_pdf
+            from tools.arxiv_scraper import download_pdf, fetch_metadata
             from tools.paper_parser import extract_text, split_sections
             from evaluator.evaluator import evaluate_paper
             from reports.report_generator import generate_report
             from crewai import LLM
+
+            # Step 0: Fetch and display paper metadata
+            with st.spinner("Fetching paper details..."):
+                metadata = fetch_metadata(url)
+
+            if metadata:
+                st.subheader("📄 Paper Details")
+                st.markdown(f"**Title:** {metadata['title']}")
+                st.markdown(f"**Authors:** {', '.join(metadata['authors'])}")
+                st.markdown(f"**Published:** {metadata['published']}")
+                with st.expander("Abstract"):
+                    st.write(metadata['summary'])
+                st.divider()
 
             # Step 1: Download paper
             with st.spinner("Downloading paper from arXiv..."):
@@ -58,7 +71,7 @@ if st.button("Evaluate Paper"):
             )
 
             # Step 5: Run evaluation
-            with st.spinner("Running AI agents for evaluation..."):
+            with st.spinner("Running AI agents for evaluation... (this may take 2-3 minutes)"):
                 result = evaluate_paper(sections, llm)
 
             # Step 6: Generate report
