@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 from tools.arxiv_scraper import download_pdf
 from tools.paper_parser import extract_text, split_sections
@@ -9,7 +10,6 @@ from reports.report_generator import generate_report
 from crewai import LLM
 
 
-# Streamlit page title
 st.title("Agentic Research Paper Evaluator")
 
 st.write(
@@ -18,45 +18,40 @@ st.write(
 )
 
 
-# Input field
+# Check API key
+if "OPENAI_API_KEY" not in os.environ:
+    st.error("OPENAI_API_KEY environment variable not set.")
+    st.stop()
+
+
 url = st.text_input("Enter arXiv URL")
 
 
-# Button
 if st.button("Evaluate Paper"):
 
     if url:
 
         try:
 
-            # Step 1 — Download PDF
-            st.info("Downloading paper from arXiv...")
-            pdf_path = download_pdf(url)
+            with st.spinner("Downloading paper from arXiv..."):
+                pdf_path = download_pdf(url)
 
-            # Step 2 — Extract text
-            st.info("Extracting text from PDF...")
-            text = extract_text(pdf_path)
+            with st.spinner("Extracting text from PDF..."):
+                text = extract_text(pdf_path)
 
-            # Step 3 — Split into sections
-            st.info("Decomposing paper into sections...")
-            sections = split_sections(text)
+            with st.spinner("Decomposing paper into sections..."):
+                sections = split_sections(text)
 
-            # Step 4 — Initialize LLM
             llm = LLM(model="gpt-4o-mini")
 
-            # Step 5 — Run agentic evaluation
-            st.info("Running AI agents for evaluation...")
-            result = evaluate_paper(sections, llm)
+            with st.spinner("Running AI agents for evaluation..."):
+                result = evaluate_paper(sections, llm)
 
-            # Step 6 — Generate report
             report = generate_report(result)
 
-            # Step 7 — Display report
             st.subheader("Evaluation Report")
-
             st.markdown(report)
 
-            # Step 8 — Download button
             st.download_button(
                 label="Download Report",
                 data=report,
