@@ -1,11 +1,24 @@
+from crewai import Agent
+
+
 def create_novelty_agent(llm):
 
     return Agent(
         role="Literature Review Specialist",
 
-        goal="Determine whether the research idea is novel.",
+        goal="""
+        Evaluate whether the research contribution appears novel
+        compared to existing literature. Provide a qualitative
+        novelty assessment.
+        """,
 
-        backstory="Expert in surveying scientific literature.",
+        backstory="""
+        You are an expert researcher skilled in reviewing scientific
+        literature and identifying whether a research idea introduces
+        a new contribution or resembles existing work.
+        """,
 
-        llm=llm
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
     )
