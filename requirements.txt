@@ -6,3 +6,5 @@ openai
 tiktoken
 arxiv
 python-dotenv
+chromadb==0.4.24
+hnswlib==0.7.0
