@@ -4,41 +4,70 @@ from tools.arxiv_scraper import download_pdf
 from tools.paper_parser import extract_text, split_sections
 
 from evaluator.evaluator import evaluate_paper
+from reports.report_generator import generate_report
+
+from crewai import LLM
 
 
+# Streamlit page title
 st.title("Agentic Research Paper Evaluator")
 
+st.write(
+    "Enter an arXiv paper link to automatically evaluate the research paper "
+    "using multiple AI agents."
+)
+
+
+# Input field
 url = st.text_input("Enter arXiv URL")
 
 
+# Button
 if st.button("Evaluate Paper"):
 
     if url:
 
-        st.write("Downloading paper...")
+        try:
 
-        pdf_path = download_pdf(url)
+            # Step 1 — Download PDF
+            st.info("Downloading paper from arXiv...")
+            pdf_path = download_pdf(url)
 
-        st.write("Extracting text...")
+            # Step 2 — Extract text
+            st.info("Extracting text from PDF...")
+            text = extract_text(pdf_path)
 
-        text = extract_text(pdf_path)
+            # Step 3 — Split into sections
+            st.info("Decomposing paper into sections...")
+            sections = split_sections(text)
 
-        st.write("Decomposing paper sections...")
+            # Step 4 — Initialize LLM
+            llm = LLM(model="gpt-4o-mini")
 
-        sections = split_sections(text)
+            # Step 5 — Run agentic evaluation
+            st.info("Running AI agents for evaluation...")
+            result = evaluate_paper(sections, llm)
 
-        abstract = sections["abstract"]
-        methodology = sections["methodology"]
-        results = sections["results"]
-        conclusion = sections["conclusion"]
+            # Step 6 — Generate report
+            report = generate_report(result)
 
-        st.write("Running AI evaluation agents...")
+            # Step 7 — Display report
+            st.subheader("Evaluation Report")
 
-        result = evaluate_paper(sections)
+            st.markdown(report)
 
-        st.subheader("Evaluation Report")
+            # Step 8 — Download button
+            st.download_button(
+                label="Download Report",
+                data=report,
+                file_name="research_paper_report.md",
+                mime="text/markdown"
+            )
 
-        st.write(result)
+        except Exception as e:
+
+            st.error(f"Error occurred: {e}")
 
     else:
-        st.warning("Please enter a valid arXiv URL")
+
+        st.warning("Please enter a valid arXiv URL.")
