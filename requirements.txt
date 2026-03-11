@@ -1,1 +1,2 @@
 pipreqs
+pymupdf==1.23.8
