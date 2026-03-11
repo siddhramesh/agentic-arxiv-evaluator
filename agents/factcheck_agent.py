@@ -1,18 +1,11 @@
-from crewai import Agent
-
 def create_factcheck_agent(llm):
 
     return Agent(
         role="Scientific Fact Checker",
 
-        goal="Verify formulas, references, and factual claims.",
+        goal="Verify formulas, constants and scientific claims.",
 
-        backstory="""
-        You are responsible for verifying scientific accuracy
-        and identifying unsupported claims in research papers.
-        """,
+        backstory="Research scientist verifying claims.",
 
-        verbose=True,
-        allow_delegation=False,
         llm=llm
     )
