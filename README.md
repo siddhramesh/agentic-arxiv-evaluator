@@ -174,25 +174,3 @@ CrewAI
 PyMuPDF
 Requests
 OpenAI API
-
----
-
-## Future Improvements
-
-* Semantic Scholar integration for deeper novelty detection
-* Retrieval-augmented fact verification
-* Parallel agent execution
-* Visualization dashboards for evaluation metrics
-* Support for additional research repositories
-
----
-
-## License
-
-This project is for educational and research purposes.
-
----
-
-## Author
-
-Siddhramesh Diksanggi
