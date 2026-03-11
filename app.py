@@ -1,23 +1,20 @@
 import os
 os.environ["OTEL_SDK_DISABLED"] = "true"
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
+os.environ["GROQ_DISABLE_TELEMETRY"] = "true"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
-from tools.arxiv_scraper import download_pdf
-from tools.paper_parser import extract_text, split_sections
-from evaluator.evaluator import evaluate_paper
-from reports.report_generator import generate_report
-from crewai import LLM
 
 st.title("Agentic Research Paper Evaluator")
 st.write(
     "Enter an arXiv paper link to automatically evaluate the research paper "
     "using multiple AI agents."
-
+)
 
 # Load API key from Streamlit secrets
 if "GROQ_API_KEY" in st.secrets:
@@ -32,6 +29,13 @@ url = st.text_input("Enter arXiv URL")
 if st.button("Evaluate Paper"):
     if url:
         try:
+            # Heavy imports only when needed
+            from tools.arxiv_scraper import download_pdf
+            from tools.paper_parser import extract_text, split_sections
+            from evaluator.evaluator import evaluate_paper
+            from reports.report_generator import generate_report
+            from crewai import LLM
+
             # Step 1: Download paper
             with st.spinner("Downloading paper from arXiv..."):
                 pdf_path = download_pdf(url)
