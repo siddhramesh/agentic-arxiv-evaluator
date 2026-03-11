@@ -1,3 +1,7 @@
+import os
+os.environ["CREWAI_STORAGE_DIR"] = "/tmp/crewai"
+os.environ["ANONYMIZED_TELEMETRY"] = "false"
+
 import time
 from crewai import Crew, Process
 from agents.consistency_agent import create_consistency_agent
@@ -16,7 +20,7 @@ from tasks.judge_task import create_judge_task
 
 def step_callback(step_output):
     """Pause between agent steps to avoid hitting TPM rate limits."""
-    time.sleep(20)
+    time.sleep(30)
 
 
 def evaluate_paper(sections, llm):
