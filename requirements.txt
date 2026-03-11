@@ -1,8 +1,1 @@
-streamlit
-crewai
-pymupdf
-requests
-python-dotenv
-openai
-arxiv
-tiktoken
+pip install pipreqs
