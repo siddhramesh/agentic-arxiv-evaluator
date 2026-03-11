@@ -1,12 +1,11 @@
+import time
 from crewai import Crew, Process
-
 from agents.consistency_agent import create_consistency_agent
 from agents.grammar_agent import create_grammar_agent
 from agents.novelty_agent import create_novelty_agent
 from agents.factcheck_agent import create_factcheck_agent
 from agents.authenticity_agent import create_authenticity_agent
 from agents.judge_agent import create_judge_agent
-
 from tasks.consistency_task import create_consistency_task
 from tasks.grammar_task import create_grammar_task
 from tasks.novelty_task import create_novelty_task
@@ -15,8 +14,12 @@ from tasks.authenticity_task import create_authenticity_task
 from tasks.judge_task import create_judge_task
 
 
-def evaluate_paper(sections, llm):
+def step_callback(step_output):
+    """Pause between agent steps to avoid hitting TPM rate limits."""
+    time.sleep(20)
 
+
+def evaluate_paper(sections, llm):
     abstract = sections["abstract"]
     methodology = sections["methodology"]
     results = sections["results"]
@@ -35,8 +38,6 @@ def evaluate_paper(sections, llm):
     novelty_task = create_novelty_task(novelty_agent, abstract)
     factcheck_task = create_factcheck_task(factcheck_agent, methodology)
     authenticity_task = create_authenticity_task(authenticity_agent, results)
-
-    # Judge task (runs after other analyses)
     judge_task = create_judge_task(judge_agent, "Results from previous agent analyses")
 
     tasks = [
@@ -60,9 +61,9 @@ def evaluate_paper(sections, llm):
         tasks=tasks,
         process=Process.sequential,
         verbose=True,
-        memory=False
+        memory=False,
+        step_callback=step_callback
     )
 
     result = crew.kickoff()
-
     return result
