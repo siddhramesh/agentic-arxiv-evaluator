@@ -1,18 +1,14 @@
-from crewai import Agent
-
 def create_authenticity_agent(llm):
 
     return Agent(
         role="Research Integrity Investigator",
 
-        goal="Estimate fabrication probability based on anomalies.",
+        goal="Estimate fabrication probability.",
 
         backstory="""
-        You analyze logical inconsistencies and statistical
-        anomalies to detect fabricated research claims.
+        You detect statistical anomalies,
+        fabricated datasets and logical gaps.
         """,
 
-        verbose=True,
-        allow_delegation=False,
         llm=llm
     )
