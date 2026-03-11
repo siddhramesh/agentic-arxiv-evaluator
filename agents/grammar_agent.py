@@ -1,13 +1,23 @@
 from crewai import Agent
 
+
 def create_grammar_agent(llm):
 
     return Agent(
         role="Academic Language Reviewer",
 
-        goal="Evaluate grammar, syntax and professional tone.",
+        goal="""
+        Evaluate the grammar, clarity, readability, and
+        professional academic tone of the research text.
+        Provide a rating: High, Medium, or Low.
+        """,
 
-        backstory="Expert editor of scientific journals.",
+        backstory="""
+        You are an experienced editor for top scientific journals,
+        specializing in improving academic writing quality and clarity.
+        """,
 
-        llm=llm
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
     )
