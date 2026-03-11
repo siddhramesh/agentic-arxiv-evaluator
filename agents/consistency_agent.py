@@ -3,17 +3,18 @@ from crewai import Agent
 def create_consistency_agent(llm):
 
     return Agent(
-        role="Consistency Auditor",
+        role="Scientific Consistency Auditor",
 
-        goal="Check if the methodology logically supports the results.",
-
-        backstory="""
-        You are an experienced peer reviewer for AI conferences.
-        You verify whether experimental design and methodology
-        justify the results presented in the research paper.
+        goal="""
+        Verify whether methodology logically supports
+        the claimed results.
         """,
 
-        verbose=True,
-        allow_delegation=False,
-        llm=llm
+        backstory="""
+        You are an expert peer reviewer specializing in
+        identifying logical inconsistencies in scientific papers.
+        """,
+
+        llm=llm,
+        verbose=True
     )
