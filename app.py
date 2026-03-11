@@ -66,7 +66,7 @@ if st.button("Evaluate Paper"):
 
             # Step 4: Initialize LLM
             llm = LLM(
-                model="groq/gemma2-9b-it",
+                model="groq/llama-3.1-8b-instant",
                 api_key=st.secrets["GROQ_API_KEY"]
             )
 
