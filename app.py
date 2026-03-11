@@ -18,12 +18,15 @@ st.write(
 )
 
 
-# Check API key
-if "OPENAI_API_KEY" not in os.environ:
-    st.error("OPENAI_API_KEY environment variable not set.")
+# Load API key from Streamlit secrets
+if "OPENAI_API_KEY" in st.secrets:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+else:
+    st.error("OPENAI_API_KEY not found in Streamlit secrets.")
     st.stop()
 
 
+# Input field
 url = st.text_input("Enter arXiv URL")
 
 
@@ -33,26 +36,33 @@ if st.button("Evaluate Paper"):
 
         try:
 
+            # Step 1: Download paper
             with st.spinner("Downloading paper from arXiv..."):
                 pdf_path = download_pdf(url)
 
+            # Step 2: Extract text
             with st.spinner("Extracting text from PDF..."):
                 text = extract_text(pdf_path)
 
+            # Step 3: Split sections
             with st.spinner("Splitting paper into sections..."):
                 sections = split_sections(text)
 
+            # Step 4: Initialize LLM
             llm = LLM(model="gpt-4o-mini")
 
+            # Step 5: Run evaluation
             with st.spinner("Running AI agents for evaluation..."):
                 result = evaluate_paper(sections, llm)
 
+            # Step 6: Generate report
             report = generate_report(result)
 
+            # Step 7: Display report
             st.subheader("Evaluation Report")
-
             st.markdown(report)
 
+            # Step 8: Download button
             st.download_button(
                 label="Download Report",
                 data=report,
@@ -61,9 +71,7 @@ if st.button("Evaluate Paper"):
             )
 
         except Exception as e:
-
             st.error(f"Error occurred: {e}")
 
     else:
-
         st.warning("Please enter a valid arXiv URL.")
