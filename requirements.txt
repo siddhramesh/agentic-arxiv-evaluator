@@ -1,5 +1,7 @@
 crewai
-crewai-tools
-openai
 streamlit
+pymupdf
+requests
+python-dotenv
+openai
 arxiv
