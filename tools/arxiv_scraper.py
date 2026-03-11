@@ -1,23 +1,14 @@
-import arxiv
 import requests
+import fitz
 
-def fetch_paper(url):
+def download_pdf(arxiv_url):
 
-    paper_id = url.split("/")[-1]
+    paper_id = arxiv_url.split("/")[-1]
+    pdf_url = f"https://arxiv.org/pdf/{paper_id}.pdf"
 
-    search = arxiv.Search(id_list=[paper_id])
-    paper = next(search.results())
+    response = requests.get(pdf_url)
 
-    abstract = paper.summary
+    with open("paper.pdf", "wb") as f:
+        f.write(response.content)
 
-    # Basic section placeholders (since arxiv API gives only abstract)
-    # Agents will simulate analysis based on abstract
-    paper_data = {
-        "title": paper.title,
-        "abstract": abstract,
-        "methodology": abstract,
-        "results": abstract,
-        "conclusion": abstract
-    }
-
-    return paper_data
+    return "paper.pdf"
