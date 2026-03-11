@@ -1,6 +1,5 @@
 streamlit
 crewai
-pysqlite3-binary
 pymupdf
 requests
 openai
