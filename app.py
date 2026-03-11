@@ -66,8 +66,9 @@ if st.button("Evaluate Paper"):
 
             # Step 4: Initialize LLM
             llm = LLM(
-                 model="gemini/gemini-1.5-flash",
-                api_key=st.secrets["GEMINI_API_KEY"]
+                model="gemini/gemini-1.5-flash",
+                api_key=st.secrets["GEMINI_API_KEY"],
+                provider="litellm"
             )
 
             # Step 5: Run evaluation
