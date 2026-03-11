@@ -3,6 +3,8 @@ os.environ["OTEL_SDK_DISABLED"] = "true"
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 os.environ["GROQ_DISABLE_TELEMETRY"] = "true"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["CREWAI_STORAGE_DIR"] = "/tmp/crewai"
+os.environ["ANONYMIZED_TELEMETRY"] = "false"
 
 try:
     __import__('pysqlite3')
