@@ -39,7 +39,7 @@ if st.button("Evaluate Paper"):
             with st.spinner("Extracting text from PDF..."):
                 text = extract_text(pdf_path)
 
-            with st.spinner("Decomposing paper into sections..."):
+            with st.spinner("Splitting paper into sections..."):
                 sections = split_sections(text)
 
             llm = LLM(model="gpt-4o-mini")
@@ -50,6 +50,7 @@ if st.button("Evaluate Paper"):
             report = generate_report(result)
 
             st.subheader("Evaluation Report")
+
             st.markdown(report)
 
             st.download_button(
